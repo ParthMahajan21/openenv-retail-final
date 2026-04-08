@@ -1,0 +1,6 @@
+name: Retail Assistant Environment
+description: Simulates real-world retail tasks
+tasks:
+  - easy
+  - medium
+  - hard
