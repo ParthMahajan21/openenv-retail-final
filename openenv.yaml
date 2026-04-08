@@ -1,6 +1,17 @@
-name: Retail Assistant Environment
-description: Simulates real-world retail tasks
+name: OpenEnv Retail Assistant
+description: Retail AI task simulation
+version: 1.0
+
 tasks:
-  - easy
-  - medium
-  - hard
+  - name: easy
+    description: Email classification
+
+  - name: medium
+    description: Customer support response
+
+  - name: hard
+    description: Data cleaning and analysis
+
+reward:
+  type: continuous
+  range: [0.0, 1.0]
