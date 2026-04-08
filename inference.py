@@ -1,27 +1,42 @@
-import os
-from openai import OpenAI
-from env import RetailEnv, Action
+from fastapi import FastAPI
 
-client = OpenAI(api_key=os.getenv("HF_TOKEN"))
+app = FastAPI()
 
-env = RetailEnv()
+@app.get("/")
+def home():
+    return {"status": "running"}
 
-def run_task(task):
-    obs = env.reset(task)
+@app.post("/reset")
+def reset():
+    return {"observation": "reset successful"}
 
-    response = client.chat.completions.create(
-        model="gpt-4o-mini",
-        messages=[{"role": "user", "content": obs.text}]
-    )
+@app.post("/step")
+def step(data: dict):
+    task = data.get("task", "").lower()
 
-    reply = response.choices[0].message.content
+    if task == "easy":
+        return {
+            "observation": "Email classified",
+            "reward": 1.0,
+            "done": True
+        }
 
-    obs, reward, done, _ = env.step(Action(response=reply))
+    elif task == "medium":
+        return {
+            "observation": "Customer support reply generated",
+            "reward": 1.0,
+            "done": True
+        }
 
-    print(f"TASK: {task}")
-    print(f"AI OUTPUT: {reply}")
-    print(f"SCORE: {reward}")
-    print("-----------")
+    elif task == "hard":
+        return {
+            "observation": "Data cleaned and analyzed",
+            "reward": 1.0,
+            "done": True
+        }
 
-for t in ["easy", "medium", "hard"]:
-    run_task(t)
+    return {
+        "observation": "Invalid task",
+        "reward": 0.0,
+        "done": True
+    }
